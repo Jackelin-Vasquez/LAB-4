@@ -4,16 +4,18 @@ class Participante():
         self.__institucion= institucion
 
 class BandaEscolar(Participante):
-    def __init__(self,nombre,institucion,categoria,puntuaje):
+    def __init__(self,nombre,institucion,categoria):
         super().__init__(nombre,institucion)
         self._categoria= categoria
-        self._puntuaje= puntuaje
+        self._puntajes= {}
+        self.total = 0
+        self.promedio = 0
         @property
         def categoria(self):
             return self._categoria
         @property
         def puntaje(self):
-            return self._puntuaje
+            return self._puntaje
         @categoria.setter
         def categoria(self,categoria):
             if len(categoria) <4:
@@ -27,11 +29,24 @@ class BandaEscolar(Participante):
             else:
                 self._puntaje = puntaje
 
-        def set_categoria(self):
+        def set_categoria(self, new_cat):
             pass
 
-        def registrar_puntajes(self):
-            pass
+        def registrar_puntajes(self, calificaciones):
+            punteo_mal = False
+            for cat, punteo in calificaciones.items():
+                if punteo < 0 and punteo > 10:
+                    punteo_mal = True
+                    print(f"El punteo de la categoría {cat} no está en el rango permitido (0-10)")
+            if not punteo_mal:
+                total = 0
+                for punteo in calificaciones.values():
+                    total += punteo
+                promedio = round(total / len(calificaciones.values()), 0)
+                self.puntajes = calificaciones
+                self.total = total
+                self.promedio = promedio
+
 
         def mostrar_info(self):
             pass
