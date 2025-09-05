@@ -13,7 +13,7 @@ class Concurso():
     def __init__(self,fecha,nombre):
         self.fecha= fecha
         self.nombre= nombre
-
+#IJD
 
 import tkinter as tk
 from tkinter import messagebox
