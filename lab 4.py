@@ -11,6 +11,9 @@ class Participante():
     def institucion(self):
         return self.__institucion
 
+    def mostrar_informacion(self):
+        return f"{self.nombre} - {self.__institucion}"
+
 class BandaEscolar(Participante):
     def __init__(self,nombre,institucion,categoria,puntuaje):
         super().__init__(nombre,institucion)
@@ -36,10 +39,12 @@ class Concurso():
 
     def listar_bandas(self):
         for banda in self.bandas.values():
-            print(f"{banda.nombre} - {banda.institucion}")
+            print(banda.mostrar_informacion)
 
     def ranking(self):
-        pass
+        valores_ordenados=dict(sorted(self.bandas.values(),key=lambda item: item.promedio))
+        print(valores_ordenados)
+
 import tkinter as tk
 
 def inscribir_banda():
