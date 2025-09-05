@@ -3,6 +3,17 @@ class Participante():
         self.__nombre= nombre
         self.__institucion= institucion
 
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @property
+    def institucion(self):
+        return self.__institucion
+
+    def mostrar_informacion(self):
+        return f"{self.nombre} - {self.__institucion}"
+
 class BandaEscolar(Participante):
     def __init__(self,nombre,institucion,categoria):
         super().__init__(nombre,institucion)
@@ -65,7 +76,26 @@ class Concurso():
     def __init__(self,fecha,nombre):
         self.fecha= fecha
         self.nombre= nombre
-#IJD
+        self.bandas= {}
+
+    def inscribir_banda(self,banda):
+        if banda.nombre in self.bandas:
+            raise ValueError (f"La banda {self.nombre} ya se encuentra inscrita...")
+        self.bandas[banda.nombre] = banda
+
+    def registrar_evaluacion(self,nombre,puntuaje):
+        if not nombre in self.bandas:
+            raise ValueError(f"No existe banda con el nombre {nombre}...")
+        self.bandas[nombre].registrar_evaluacion(puntuaje)
+
+
+    def listar_bandas(self):
+        for banda in self.bandas.values():
+            print(banda.mostrar_informacion)
+
+    def ranking(self): #rank
+        valores_ordenados=dict(sorted(self.bandas.values(),key=lambda item: item.promedio))
+        print(valores_ordenados)
 
 import tkinter as tk
 
