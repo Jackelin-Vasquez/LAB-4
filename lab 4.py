@@ -88,7 +88,7 @@ class Concurso():
 
     def listar_bandas(self):
         for banda in self.bandas.values():
-            print(banda.mostrar_informacion)
+            print(banda.mostrar_informacion())
 
     def ranking(self): #rank
         ordenadas = sorted(self.bandas.values(), key=lambda b: b.promedio, reverse=True)
