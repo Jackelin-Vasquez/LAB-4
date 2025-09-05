@@ -41,7 +41,7 @@ class Concurso():
         for banda in self.bandas.values():
             print(banda.mostrar_informacion)
 
-    def ranking(self):
+    def ranking(self): #rank
         valores_ordenados=dict(sorted(self.bandas.values(),key=lambda item: item.promedio))
         print(valores_ordenados)
 
