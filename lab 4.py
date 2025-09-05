@@ -8,6 +8,26 @@ class BandaEscolar(Participante):
         super().__init__(nombre,institucion)
         self._categoria= categoria
         self._puntuaje= puntuaje
+        @property
+        def categoria(self):
+            return self._categoria
+        @property
+        def puntaje(self):
+            return self._puntuaje
+        @categoria.setter
+        def categoria(self,categoria):
+            if len(categoria) <4:
+                print("Categoría muy corta")
+            else:
+                self._categoria = categoria
+        @puntaje.setter
+        def puntaje(self,puntaje):
+            if puntaje <0 or puntaje > 10:
+                print("El puntaje debe estar entre 0 y 10")
+            else:
+                self._puntaje = puntaje
+
+
 
 class Concurso():
     def __init__(self,fecha,nombre):
