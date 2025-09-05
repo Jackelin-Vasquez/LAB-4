@@ -69,9 +69,6 @@ class BandaEscolar(Participante):
         print(f"Total: {self.total}\nPromedio: {self.promedio}")
 
 
-
-
-
 class Concurso():
     def __init__(self,fecha,nombre):
         self.fecha= fecha
@@ -94,8 +91,9 @@ class Concurso():
             print(banda.mostrar_informacion)
 
     def ranking(self): #rank
-        valores_ordenados=dict(sorted(self.bandas.values(),key=lambda item: item.promedio))
-        print(valores_ordenados)
+        ordenadas = sorted(self.bandas.values(), key=lambda b: b.promedio, reverse=True)
+        for i, banda in enumerate(ordenadas, 1):
+            print(f"{i}. {banda.nombre} - Promedio: {banda.promedio}")
 
 import tkinter as tk
 
