@@ -21,38 +21,38 @@ class BandaEscolar(Participante):
         self._puntajes= {}
         self.total = 0
         self.promedio = 0
-        @property
-        def categoria(self):
-            return self._categoria
-        @property
-        def puntaje(self):
-            return self._puntaje
-        @categoria.setter
-        def categoria(self,categoria):
-            if len(categoria) <4:
-                print("Categoría muy corta")
-            else:
-                self._categoria = categoria
-        @puntaje.setter
-        def puntaje(self,puntaje):
-            if puntaje <0 or puntaje > 10:
-                print("El puntaje debe estar entre 0 y 10")
-            else:
-                self._puntaje = puntaje
+    @property
+    def categoria(self):
+        return self._categoria
+    @property
+    def puntaje(self):
+        return self._puntaje
+    @categoria.setter
+    def categoria(self,categoria):
+        if len(categoria) <4:
+            print("Categoría muy corta")
+        else:
+            self._categoria = categoria
+    @puntaje.setter
+    def puntaje(self,puntaje):
+        if puntaje <0 or puntaje > 10:
+            print("El puntaje debe estar entre 0 y 10")
+        else:
+            self._puntaje = puntaje
 
-        def set_categoria(self, new_cat):
-            if not any(new_cat == cat for cat in ["primaria", "basico", "diversificado"]):
-                print("Categoría inválida")
-            else:
-                self._categoria = new_cat
-                print(f"Categoría establecida como {new_cat}")
+    def set_categoria(self, new_cat):
+        if not any(new_cat == cat for cat in ["primaria", "basico", "diversificado"]):
+            print("Categoría inválida")
+        else:
+            self._categoria = new_cat
+            print(f"Categoría establecida como {new_cat}")
 
-        def registrar_puntajes(self, calificaciones):
-            punteo_mal = False
-            for cat, punteo in calificaciones.items():
-                if punteo < 0 and punteo > 10:
-                    punteo_mal = True
-                    print(f"El punteo de la categoría {cat} no está en el rango permitido (0-10)")
+    def registrar_puntajes(self, calificaciones):
+        punteo_mal = False
+        for cat, punteo in calificaciones.items():
+            if punteo < 0 and punteo > 10:
+                punteo_mal = True
+                print(f"El punteo de la categoría {cat} no está en el rango permitido (0-10)")
             if not punteo_mal:
                 total = 0
                 for punteo in calificaciones.values():
@@ -62,11 +62,11 @@ class BandaEscolar(Participante):
                 self.total = total
                 self.promedio = promedio
 
-        def mostrar_info(self):
-            print(f"Nombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
-            for tipo, punteo in self.puntajes.items():
-                print(f"{tipo}: {punteo}")
-            print(f"Total: {self.total}\nPromedio: {self.promedio}")
+    def mostrar_info(self):
+        print(f"Nombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
+        for tipo, punteo in self.puntajes.items():
+            print(f"{tipo}: {punteo}")
+        print(f"Total: {self.total}\nPromedio: {self.promedio}")
 
 
 
@@ -99,58 +99,51 @@ class Concurso():
 
 import tkinter as tk
 
-def inscribir_banda():
-    print("Se abrió la ventana: Inscribir Banda")
-    ventana_inscribir = tk.Toplevel(ventana)
-    ventana_inscribir.title("Inscribir Banda")
-    ventana_inscribir.geometry("400x300")
+class ConcursoBandasApp:
+    def __init__(self):
+        self.ventana = tk.Tk()
+        self.ventana.title("Concurso de Bandas - Quetzaltenango")
+        self.ventana.geometry("500x300")
 
-def registrar_evaluacion():
-    print("Se abrió la ventana: Registrar Evaluación")
-    ventana_eval = tk.Toplevel(ventana)
-    ventana_eval.title("Registrar Evaluación")
-    ventana_eval.geometry("400x300")
+        self.menu()
 
-def listar_bandas():
-    print("Se abrió la ventana: Listado de Bandas")
-    ventana_listado = tk.Toplevel(ventana)
-    ventana_listado.title("Listado de Bandas")
-    ventana_listado.geometry("400x300")
+        tk.Label(
+            self.ventana,
+            text="Sistema de Inscripción y Evaluación de Bandas Escolares\nConcurso 14 de Septiembre - Quetzaltenango",
+            font=("Arial", 12, "bold"),
+            justify="center"
+        ).pack(pady=50)
 
-def ver_ranking():
-    print("Se abrió la ventana: Ranking Final")
-    ventana_ranking = tk.Toplevel(ventana)
-    ventana_ranking.title("Ranking Final")
-    ventana_ranking.geometry("400x300")
+        self.ventana.mainloop()
 
-def salir():
-    print("Aplicación cerrada")
-    ventana.quit()
+    def menu(self):
+        barra = tk.Menu(self.ventana)
+        opciones = tk.Menu(barra, tearoff=0)
+        opciones.add_command(label="Inscribir Banda", command=self.inscribir_banda)
+        opciones.add_command(label="Registrar Evaluación", command=self.registrar_evaluacion)
+        opciones.add_command(label="Listar Bandas", command=self.listar_bandas)
+        opciones.add_command(label="Ver Ranking", command=self.ver_ranking)
+        opciones.add_separator()
+        opciones.add_command(label="Salir", command=self.ventana.quit)
+        barra.add_cascade(label="Opciones", menu=opciones)
+        self.ventana.config(menu=barra)
 
-ventana = tk.Tk()
-ventana.title("Concurso de Bandas - Quetzaltenango")
-ventana.geometry("500x300")
+    def inscribir_banda(self):
+        print("Se abrió la ventana: Inscribir Banda")
+        tk.Toplevel(self.ventana).title("Inscribir Banda")
 
-barra_menu = tk.Menu(ventana)
+    def registrar_evaluacion(self):
+        print("Se abrió la ventana: Registrar Evaluación")
+        tk.Toplevel(self.ventana).title("Registrar Evaluación")
 
-menu_opciones = tk.Menu(barra_menu, tearoff=0)
-menu_opciones.add_command(label="Inscribir Banda", command=inscribir_banda)
-menu_opciones.add_command(label="Registrar Evaluación", command=registrar_evaluacion)
-menu_opciones.add_command(label="Listar Bandas", command=listar_bandas)
-menu_opciones.add_command(label="Ver Ranking", command=ver_ranking)
-menu_opciones.add_separator()
-menu_opciones.add_command(label="Salir", command=salir)
+    def listar_bandas(self):
+        print("Se abrió la ventana: Listado de Bandas")
+        tk.Toplevel(self.ventana).title("Listado de Bandas")
 
-barra_menu.add_cascade(label="Opciones", menu=menu_opciones)
+    def ver_ranking(self):
+        print("Se abrió la ventana: Ranking Final")
+        tk.Toplevel(self.ventana).title("Ranking Final")
 
-ventana.config(menu=barra_menu)
 
-etiqueta = tk.Label(
-    ventana,
-    text="Sistema de Inscripción y Evaluación de Bandas Escolares\nDesfile 15 de Septiembre - Quetzaltenango",
-    font=("Arial", 12, "bold"),
-    justify="center"
-)
-etiqueta.pack(pady=50)
-
-ventana.mainloop()
+if __name__ == "__main__":
+    ConcursoBandasApp()
