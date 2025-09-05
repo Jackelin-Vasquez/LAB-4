@@ -51,9 +51,12 @@ class BandaEscolar(Participante):
                 self.total = total
                 self.promedio = promedio
 
-
         def mostrar_info(self):
-            pass
+            print(f"Nombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
+            for tipo, punteo in self.puntajes.items():
+                print(f"{tipo}: {punteo}")
+            print(f"Total: {self.total}\nPromedio: {self.promedio}")
+
 
 
 
