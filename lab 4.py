@@ -27,6 +27,16 @@ class BandaEscolar(Participante):
             else:
                 self._puntaje = puntaje
 
+        def set_categoria(self):
+            pass
+
+        def registrar_puntajes(self):
+            pass
+
+        def mostrar_info(self):
+            pass
+
+
 
 
 class Concurso():
