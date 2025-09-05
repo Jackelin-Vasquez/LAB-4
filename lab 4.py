@@ -30,7 +30,11 @@ class BandaEscolar(Participante):
                 self._puntaje = puntaje
 
         def set_categoria(self, new_cat):
-            pass
+            if not any(new_cat =cat for cat in ["primaria", "basico", "diversificado"]):
+                print("Categoría inválida")
+            else:
+                self._categoria = new_cat
+                print(f"Categoría establecida como {new_cat}")
 
         def registrar_puntajes(self, calificaciones):
             punteo_mal = False
