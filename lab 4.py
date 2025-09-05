@@ -41,7 +41,7 @@ class BandaEscolar(Participante):
                 self._puntaje = puntaje
 
         def set_categoria(self, new_cat):
-            if not any(new_cat =cat for cat in ["primaria", "basico", "diversificado"]):
+            if not any(new_cat == cat for cat in ["primaria", "basico", "diversificado"]):
                 print("Categoría inválida")
             else:
                 self._categoria = new_cat
