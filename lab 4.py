@@ -173,6 +173,11 @@ class ConcursoBandasApp:
         print("Se abrió la ventana: Listado de Bandas")
         v_listar = tk.Toplevel(self.ventana)
         v_listar.title("Listado de Bandas")
+        texto = ""
+        for banda in concurso.bandas.values():
+            texto += banda.mostrar_informacion() + "\n"
+
+        tk.Label(v_listar,text= texto).pack(pady=10)
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")
