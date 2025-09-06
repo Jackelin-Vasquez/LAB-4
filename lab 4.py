@@ -238,22 +238,11 @@ class ConcursoBandasApp:
         print("Se abrió la ventana: Listado de Bandas")
         v_listar = tk.Toplevel(self.ventana)
         v_listar.title("Listado de Bandas")
-        if concurso.hay_bandas():
-            pass
-        else:
-            messagebox.showerror("Error", "No hay bandas registradas")
-            v_listar.destroy()
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")
         v_rankear = tk.Toplevel(self.ventana)
         v_rankear.title("Ranking Final")
-        if concurso.hay_bandas():
-            pass
-        else:
-            messagebox.showerror("Error", "No hay bandas registradas")
-            v_rankear.destroy()
-
 
 if __name__ == "__main__":
     ConcursoBandasApp()
