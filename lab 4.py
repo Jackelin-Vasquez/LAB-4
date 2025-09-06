@@ -165,10 +165,17 @@ class ConcursoBandasApp:
             insti = insti_entrada.get()
             cat = categoria.get()
             if nombre and insti:
-                banda = BandaEscolar(nombre, insti, cat)
-                concurso.inscribir_banda(banda)
-                print(f"Banda guardada con éxito: {nombre}, {insti}, {cat}")
-                v_inscribir.destroy()
+                nombre_dupe = False
+                if concurso.bandas:
+                    for bandita_name in concurso.bandas.keys():
+                        if bandita_name == nombre:
+                            messagebox.showerror(title="Error", message="Ya hay una banda con ese nombre")
+                            nombre_dupe = True
+                if not nombre_dupe:
+                    banda = BandaEscolar(nombre, insti, cat)
+                    concurso.inscribir_banda(banda)
+                    print(f"Banda guardada con éxito: {nombre}, {insti}, {cat}")
+                    v_inscribir.destroy()
             else:
                 messagebox.showerror("Error", "Debe llenar todos los campos para guardar")
         tk.Button(v_inscribir, text="Guardar", command=guardar).pack()
@@ -220,14 +227,16 @@ class ConcursoBandasApp:
                     messagebox.showerror("Error", "Los punteos deben ser números enteros del 0 al 10")
                 else:
                     punteos = {}
-                    punteos["ritmo"] = c_ritmo.get()
-                    punteos["uniformidad"] = c_uniformidad.get()
-                    punteos["coreo"] = c_coreo.get()
-                    punteos["alineacion"] = c_alineacion.get()
-                    punteos["puntualidad"] = c_puntualidad.get()
-                    for banda_search, n in concurso.bandas.values():
+                    punteos["ritmo"] = int(c_ritmo.get())
+                    punteos["uniformidad"] = int(c_uniformidad.get())
+                    punteos["coreo"] = int(c_coreo.get())
+                    punteos["alineacion"] = int(c_alineacion.get())
+                    punteos["puntualidad"] = int(c_puntualidad.get())
+                    for banda_search, n in concurso.bandas.items():
                         if banda_search == banditas.get():
                             n.registrar_puntajes(punteos)
+                            messagebox.showinfo("Punteos guardados", "Punteos registrados correctamente")
+                            v_registrar.destroy()
             tk.Button(v_registrar, text="Guardar", command=guardar).pack()
 
         else:
