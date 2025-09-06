@@ -96,12 +96,12 @@ class Concurso():
         for indice, banda in enumerate(self.bandas.values(), 1):
             informacion = str(indice) + "." + banda.mostrar_informacion()
             if banda.puntajes:
-                puntajes_str = ""
+                puntajes = ""
                 for criterio, puntaje in banda.puntajes.items():
-                    if puntajes_str != "":
-                        puntajes_str += ", "
-                    puntajes_str += criterio + ": " + str(puntaje)
-                informacion += " Puntajes: " + puntajes_str
+                    if puntajes != "":
+                        puntajes += ", "
+                    puntajes += criterio + ": " + str(puntaje)
+                informacion += " Puntajes: " + puntajes
                 informacion += " Total: " + str(banda.total)
                 informacion += " Promedio: " + str(banda.promedio)
             else:
