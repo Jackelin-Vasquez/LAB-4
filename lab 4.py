@@ -109,10 +109,13 @@ class Concurso():
             lista_info.append(informacion)
         return lista_info
 
-    def ranking(self): #rank
-        ordenadas = sorted(self.bandas.values(), key=lambda b: b.promedio, reverse=True)
-        for i, banda in enumerate(ordenadas, 1):
-            print(f"{i}. {banda.nombre} - Promedio: {banda.promedio}")
+    def ranking(self):
+        if not self.bandas:
+            return "no hay bandas..."
+        bandas= list(self.bandas.values())
+        banda_ordendas= sorted(bandas, key =lambda b:(b.total,b.promedio),reverse=True)
+ #       ordenadas = sorted(self.bandas.values(), key=lambda b: b.promedio, reverse=True)
+        return banda_ordendas
 
     def hay_bandas(self):
         if self.bandas:
@@ -271,7 +274,14 @@ class ConcursoBandasApp:
         print("Se abrió la ventana: Ranking Final")
         v_rankear = tk.Toplevel(self.ventana)
         v_rankear.title("Ranking Final")
-        concurso.ranking_listar(v_rankear)
+        lista_ordenada = concurso.ranking()
+
+        if not lista_ordenada:
+            tk.Label(v_rankear, text="No hay bandas registradas").pack()
+        else:
+            for i, banda in enumerate(lista_ordenada, 1):
+                informacion = f"{i}. {banda.mostrar_informacion()} - Total: {banda.total} - Promedio: {banda.promedio}"
+                tk.Label(v_rankear, text=informacion).pack()
 
 if __name__ == "__main__":
     ConcursoBandasApp()
