@@ -45,12 +45,11 @@ class BandaEscolar(Participante):
             print("Categoría inválida")
         else:
             self._categoria = new_cat
-            print(f"Categoría establecida como {new_cat}")
 
     def registrar_puntajes(self, calificaciones):
         punteo_mal = False
         for cat, punteo in calificaciones.items():
-            if punteo < 0 and punteo > 10:
+            if punteo < 0 or punteo > 10:
                 punteo_mal = True
                 print(f"El punteo de la categoría {cat} no está en el rango permitido (0-10)")
             if not punteo_mal:
@@ -95,7 +94,10 @@ class Concurso():
         for i, banda in enumerate(ordenadas, 1):
             print(f"{i}. {banda.nombre} - Promedio: {banda.promedio}")
 
+concurso = Concurso("14-09-2025", "Independencia")
+
 import tkinter as tk
+from tkinter import messagebox
 
 class ConcursoBandasApp:
     def __init__(self):
@@ -128,19 +130,54 @@ class ConcursoBandasApp:
 
     def inscribir_banda(self):
         print("Se abrió la ventana: Inscribir Banda")
-        tk.Toplevel(self.ventana).title("Inscribir Banda")
+        v_inscribir = tk.Toplevel(self.ventana)
+        v_inscribir.title("Inscribir Banda")
+        tk.Label(v_inscribir, text="Inscribir Banda")
+
+        nombre_entrada = tk.StringVar(v_inscribir)
+        tk.Label(v_inscribir, text="Nombre de la banda").pack()
+        tk.Entry(v_inscribir, textvariable=nombre_entrada).pack()
+
+        insti_entrada = tk.StringVar(v_inscribir)
+        tk.Label(v_inscribir, text="Institución").pack()
+        tk.Entry(v_inscribir, textvariable=insti_entrada).pack()
+
+        clase_select = tk.Label(v_inscribir, text="Seleccione una categoría").pack()
+        opciones = ["primaria","básico","diversificado"]
+        categoria = tk.StringVar(v_inscribir)
+        categoria.set(opciones[0])
+
+        menu = tk.OptionMenu(v_inscribir, categoria, *opciones)
+        menu.pack(pady=5)
+
+        def guardar():
+            nombre = nombre_entrada.get()
+            insti = insti_entrada.get()
+            cat = categoria.get()
+            if nombre and insti:
+                concurso.bandas[nombre] = BandaEscolar(nombre, insti, cat)
+                print(f"Banda guardada con éxito: {nombre}, {insti}, {cat}")
+                v_inscribir.destroy()
+            else:
+                messagebox.showerror("Error", "Debe llenar todos los campos para guardar")
+        tk.Button(v_inscribir, text="Guardar", command=guardar).pack()
+
 
     def registrar_evaluacion(self):
         print("Se abrió la ventana: Registrar Evaluación")
-        tk.Toplevel(self.ventana).title("Registrar Evaluación")
+        v_registrar = tk.Toplevel(self.ventana)
+        v_registrar.title("Registrar Evaluación")
+
 
     def listar_bandas(self):
         print("Se abrió la ventana: Listado de Bandas")
-        tk.Toplevel(self.ventana).title("Listado de Bandas")
+        v_listar = tk.Toplevel(self.ventana)
+        v_listar.title("Listado de Bandas")
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")
-        tk.Toplevel(self.ventana).title("Ranking Final")
+        v_rankear = tk.Toplevel(self.ventana)
+        v_rankear.title("Ranking Final")
 
 
 if __name__ == "__main__":
