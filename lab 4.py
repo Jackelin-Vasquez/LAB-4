@@ -1,3 +1,6 @@
+import tkinter as tk
+from tkinter import messagebox
+
 class Participante():
     def __init__(self,nombre,institucion):
         self.__nombre= nombre
@@ -61,11 +64,12 @@ class BandaEscolar(Participante):
                 self.total = total
                 self.promedio = promedio
 
-    def mostrar_info(self):
+    def mostrar_info(self, root):
         print(f"Nombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
         for tipo, punteo in self.puntajes.items():
             print(f"{tipo}: {punteo}")
         print(f"Total: {self.total}\nPromedio: {self.promedio}")
+
 
 
 class Concurso():
@@ -75,7 +79,7 @@ class Concurso():
         self.bandas= {}
 
     def inscribir_banda(self,banda):
-        if banda.nombre in self.bandas:
+        if banda.nombre in self.bandas.values():
             raise ValueError (f"La banda {self.nombre} ya se encuentra inscrita...")
         self.bandas[banda.nombre] = banda
 
@@ -84,20 +88,27 @@ class Concurso():
             raise ValueError(f"No existe banda con el nombre {nombre}...")
         self.bandas[nombre].registrar_evaluacion(puntuaje)
 
-
-    def listar_bandas(self):
-        for banda in self.bandas.values():
-            print(banda.mostrar_informacion())
+    def listar_bandas(self, root):
+        if self.bandas:
+            for banda in self.bandas.values():
+                print(banda.mostrar_info(root))
+        else:
+            messagebox.showerror("Error", "No hay bandas registradas")
+            root.destroy()
 
     def ranking(self): #rank
         ordenadas = sorted(self.bandas.values(), key=lambda b: b.promedio, reverse=True)
         for i, banda in enumerate(ordenadas, 1):
             print(f"{i}. {banda.nombre} - Promedio: {banda.promedio}")
 
+    def hay_bandas(self):
+        if self.bandas:
+            return True
+        else:
+            return False
+
 concurso = Concurso("14-09-2025", "Independencia")
 
-import tkinter as tk
-from tkinter import messagebox
 
 class ConcursoBandasApp:
     def __init__(self):
@@ -142,20 +153,19 @@ class ConcursoBandasApp:
         tk.Label(v_inscribir, text="Institución").pack()
         tk.Entry(v_inscribir, textvariable=insti_entrada).pack()
 
-        clase_select = tk.Label(v_inscribir, text="Seleccione una categoría").pack()
+        tk.Label(v_inscribir, text="Seleccione una categoría").pack()
         opciones = ["primaria","básico","diversificado"]
         categoria = tk.StringVar(v_inscribir)
         categoria.set(opciones[0])
-
-        menu = tk.OptionMenu(v_inscribir, categoria, *opciones)
-        menu.pack(pady=5)
+        menu = tk.OptionMenu(v_inscribir, categoria, *opciones).pack()
 
         def guardar():
             nombre = nombre_entrada.get()
             insti = insti_entrada.get()
             cat = categoria.get()
             if nombre and insti:
-                concurso.bandas[nombre] = BandaEscolar(nombre, insti, cat)
+                banda = BandaEscolar(nombre, insti, cat)
+                concurso.inscribir_banda(banda)
                 print(f"Banda guardada con éxito: {nombre}, {insti}, {cat}")
                 v_inscribir.destroy()
             else:
@@ -167,7 +177,61 @@ class ConcursoBandasApp:
         print("Se abrió la ventana: Registrar Evaluación")
         v_registrar = tk.Toplevel(self.ventana)
         v_registrar.title("Registrar Evaluación")
+        listado = concurso.hay_bandas()
+        if listado:
+            def validar_entrada(val):
+                if val == "":
+                    return True
+                if val.isdigit():
+                    numero = int(val)
+                    return 0 <= numero <= 10
+                return False
+            val_cmd = (v_registrar.register(validar_entrada), "%P")
 
+            tk.Label(v_registrar, text="Seleccione una banda").pack()
+            bandas = [banda for banda in concurso.bandas.keys()]
+            banditas = tk.StringVar(v_registrar)
+            banditas.set(bandas[0])
+            menu = tk.OptionMenu(v_registrar, banditas, *bandas).pack()
+
+            c_ritmo = tk.StringVar(v_registrar)
+            tk.Label(v_registrar, text= "Punteo por ritmo").pack()
+            tk.Entry(v_registrar, textvariable=c_ritmo, validate="key", validatecommand=val_cmd).pack()
+
+            c_uniformidad = tk.StringVar(v_registrar)
+            tk.Label(v_registrar, text="Punteo por uniformidad").pack()
+            tk.Entry(v_registrar, textvariable=c_uniformidad, validate="key", validatecommand=val_cmd).pack()
+
+            c_coreo = tk.StringVar(v_registrar)
+            tk.Label(v_registrar, text="Punteo por coreografía").pack()
+            tk.Entry(v_registrar, textvariable=c_coreo, validate="key", validatecommand=val_cmd).pack()
+
+            c_alineacion = tk.StringVar(v_registrar)
+            tk.Label(v_registrar, text="Punteo por alineación").pack()
+            tk.Entry(v_registrar, textvariable=c_alineacion, validate="key", validatecommand=val_cmd).pack()
+
+            c_puntualidad = tk.StringVar(v_registrar)
+            tk.Label(v_registrar, text="Punteo por puntualidad").pack()
+            tk.Entry(v_registrar, textvariable=c_puntualidad, validate="key", validatecommand=val_cmd).pack()
+
+            def guardar():
+                if not validar_entrada(c_ritmo.get()) or not validar_entrada(c_uniformidad.get()) or not validar_entrada(c_coreo.get()) or not validar_entrada(c_alineacion.get()) or not validar_entrada(c_alineacion.get()):
+                    messagebox.showerror("Error", "Los punteos deben ser números enteros del 0 al 10")
+                else:
+                    punteos = {}
+                    punteos["ritmo"] = c_ritmo.get()
+                    punteos["uniformidad"] = c_uniformidad.get()
+                    punteos["coreo"] = c_coreo.get()
+                    punteos["alineacion"] = c_alineacion.get()
+                    punteos["puntualidad"] = c_puntualidad.get()
+                    for banda_search, n in concurso.bandas.values():
+                        if banda_search == banditas.get():
+                            n.registrar_puntajes(punteos)
+            tk.Button(v_registrar, text="Guardar", command=guardar).pack()
+
+        else:
+            messagebox.showerror("Error", "No hay bandas registradas")
+            v_registrar.destroy()
 
     def listar_bandas(self):
         print("Se abrió la ventana: Listado de Bandas")
