@@ -104,6 +104,9 @@ class Concurso():
                 informacion += " Puntajes: " + puntajes_str
                 informacion += " Total: " + str(banda.total)
                 informacion += " Promedio: " + str(banda.promedio)
+            else:
+                informacion += " No evaluada aun"
+            lista_info.append(informacion)
         return lista_info
 
     def ranking(self): #rank
