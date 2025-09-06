@@ -26,7 +26,7 @@ class BandaEscolar(Participante):
         return self._categoria
     @property
     def puntaje(self):
-        return self._puntaje
+        return self._puntajes
     @categoria.setter
     def categoria(self,categoria):
         if len(categoria) <4:
@@ -52,14 +52,14 @@ class BandaEscolar(Participante):
             if punteo < 0 or punteo > 10:
                 punteo_mal = True
                 print(f"El punteo de la categoría {cat} no está en el rango permitido (0-10)")
-            if not punteo_mal:
-                total = 0
-                for punteo in calificaciones.values():
-                    total += punteo
-                promedio = round(total / len(calificaciones.values()), 0)
-                self.puntajes = calificaciones
-                self.total = total
-                self.promedio = promedio
+        if not punteo_mal:
+            total = 0
+            for punteo in calificaciones.values():
+                total += punteo
+            promedio = round(total / len(calificaciones.values()), 0)
+            self.puntajes = calificaciones
+            self.total = total
+            self.promedio = promedio
 
     def mostrar_info(self):
         print(f"Nombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
@@ -82,7 +82,7 @@ class Concurso():
     def registrar_evaluacion(self,nombre,puntuaje):
         if not nombre in self.bandas:
             raise ValueError(f"No existe banda con el nombre {nombre}...")
-        self.bandas[nombre].registrar_evaluacion(puntuaje)
+        self.bandas[nombre].registrar_puntuajes(puntuaje)
 
 
     def listar_bandas(self):
