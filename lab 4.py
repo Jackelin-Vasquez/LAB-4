@@ -65,11 +65,12 @@ class BandaEscolar(Participante):
                 self.promedio = promedio
 
     def mostrar_info(self, root):
-        print(f"Nombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
-        for tipo, punteo in self.puntajes.items():
-            print(f"{tipo}: {punteo}")
-        print(f"Total: {self.total}\nPromedio: {self.promedio}")
-
+        tk.Label(root, text=f"-----------------------\nNombre: {self.nombre}\nInstitución: {self.institucion}\nCategoria: {self.categoria}\nPuntajes:")
+        if self.puntajes:
+            for tipo, punteo in self.puntajes.items():
+                tk.Label(root, text=f"{tipo}: {punteo}")
+        else:
+            tk.Label(root, text="No hay puntajes")
 
 
 class Concurso():
