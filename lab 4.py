@@ -268,7 +268,7 @@ class ConcursoBandasApp:
             tk.Label(v_listar, text="No hay bandas registradas...").pack()
         else:
             for info in lista_info:
-                tk.Label(v_listar, text=info, anchor="w",).pack()
+                tk.Label(v_listar, text=info).pack()
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")
