@@ -89,13 +89,22 @@ class Concurso():
             raise ValueError(f"No existe banda con el nombre {nombre}...")
         self.bandas[nombre].registrar_evaluacion(puntuaje)
 
-    def listar_bandas(self, root):
-        if self.bandas:
-            for banda in self.bandas.values():
-                print(banda.mostrar_info(root))
-        else:
-            messagebox.showerror("Error", "No hay bandas registradas")
-            root.destroy()
+    def listar_bandas(self):
+        if not self.bandas:
+            return []
+        lista_info = []
+        for indice, banda in enumerate(self.bandas.values(), 1):
+            informacion = str(indice) + "." + banda.mostrar_informacion()
+            if banda.puntajes:
+                puntajes_str = ""
+                for criterio, puntaje in banda.puntajes.items():
+                    if puntajes_str != "":
+                        puntajes_str += ", "
+                    puntajes_str += criterio + ": " + str(puntaje)
+                informacion += " Puntajes: " + puntajes_str
+                informacion += " Total: " + str(banda.total)
+                informacion += " Promedio: " + str(banda.promedio)
+        return lista_info
 
     def ranking(self): #rank
         ordenadas = sorted(self.bandas.values(), key=lambda b: b.promedio, reverse=True)
@@ -247,11 +256,19 @@ class ConcursoBandasApp:
         print("Se abrió la ventana: Listado de Bandas")
         v_listar = tk.Toplevel(self.ventana)
         v_listar.title("Listado de Bandas")
+        lista_info = concurso.listar_bandas()
+
+        if not lista_info:
+            tk.Label(v_listar, text="No hay bandas registradas...").pack()
+        else:
+            for info in lista_info:
+                tk.Label(v_listar, text=info, anchor="w",).pack()
 
     def ver_ranking(self):
         print("Se abrió la ventana: Ranking Final")
         v_rankear = tk.Toplevel(self.ventana)
         v_rankear.title("Ranking Final")
+        concurso.ranking_listar(v_rankear)
 
 if __name__ == "__main__":
     ConcursoBandasApp()
